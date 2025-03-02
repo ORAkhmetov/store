@@ -49,45 +49,45 @@
                     		В if true, если выбрана не первая страница.
                     		В value номер предыдущей страницы.
                     	-->
-                        <button th:if="..." name="pageNumber" th:value="...">&lt;</button>
+                        <button th:if="${currentPage > 0}" name="pageNumber" th:value="${currentPage - 1}">&lt;</button>
                         <!-- В text номер текущей страницы -->
-                        <span th:text="${'Страница: '+paging.pageNumber()}"></span>
+                        <span th:text="${'Страница: '+ currentPage}"></span>
                         <!-- 
                     		В if true, если выбрана не последняя страница.
                     		В value номер следующей страницы.
                     	-->
-                        <button th:if="..." name="pageNumber" th:value="...">&gt;</button>
+                        <button th:if="${currentPage != totalPages - 1}" name="pageNumber" th:value="${currentPage + 1}">&gt;</button>
                     </p>
                 </form>
             </td>
         </tr>
         <!-- В each итерируемся по строке/списку со списками из N (например, трех) товаров -->
-        <tr th:each="...">
+        <tr th:each="rowProducts : ${products}">
             <!-- В each итерируемся товарам в строке/списке из N (например, трех) товаров -->
-            <td th:each="...">
+            <td th:each="product : ${rowProducts}">
                 <table>
                     <tr>
                         <td>
                             <!-- В href ссылка на страницу с карточкой товара -->
-                            <a th:href="...">
+                            <a th:href="@{/product/{id}(id=${product.id})}">
                                 <!-- В src ссылка изображение товара -->
-                                <img width="300" height="300" th:src="...">
+                                <img width="300" height="300" th:src="${product.image}">
                             </a>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <!-- В text название товара -->
-                            <b th:text="..."></b>
+                            <b th:text="${product.title}"></b>
                         </td>
                         <td>
                        	    <!-- В text цена товара -->
-                            <b th:text="..."></b>
+                            <b th:text="${product.price}"></b>
                         </td>
                     </tr>
                     <tr>
                         <!-- В text описание товара -->
-                        <td th:text="..."></td>
+                        <td th:text="${product.description}"></td>
                     </tr>
                     <tr>
                         <td>

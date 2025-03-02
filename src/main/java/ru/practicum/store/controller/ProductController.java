@@ -1,6 +1,9 @@
 package ru.practicum.store.controller;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -27,19 +30,20 @@ public class ProductController {
     @GetMapping("/")
     public String allProducts(Model model,
                               @RequestParam(name = "page", defaultValue = "0") int page,
-                              @RequestParam(name = "size", defaultValue = "10") int size) {
+                              @RequestParam(name = "pageSize", defaultValue = "5") int size) {
         Page<GetProductDto> all = productService.findAll(PageRequest.of(page, size));
-        model.addAttribute("products", all.getContent());
+        List<List<GetProductDto>> partition = ListUtils.partition(all.getContent(), 3);
+        model.addAttribute("products", partition);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", all.getTotalPages());
         model.addAttribute("size", size);
-        return "products/index";
+        return "main";
     }
 
     @GetMapping("/{id}")
     public String showProduct(@PathVariable(name = "id") Long id, Model model) {
         model.addAttribute("product", productService.findById(id));
-        return "products/show";
+        return "item";
     }
 
     @PostMapping
