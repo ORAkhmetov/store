@@ -30,5 +30,5 @@ public class Product {
 
     private String description;
 
-    private OffsetDateTime createdAt;
+    private OffsetDateTime createdAt = OffsetDateTime.now();
 }
