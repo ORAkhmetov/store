@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.practicum.store.dto.CreateProductDto;
 import ru.practicum.store.dto.GetProductDto;
+import ru.practicum.store.model.SortType;
 import ru.practicum.store.service.ProductService;
 
 @Controller
@@ -30,8 +31,9 @@ public class ProductController {
     @GetMapping("/")
     public String allProducts(Model model,
                               @RequestParam(name = "page", defaultValue = "0") int page,
-                              @RequestParam(name = "pageSize", defaultValue = "5") int size) {
-        Page<GetProductDto> all = productService.findAll(PageRequest.of(page, size));
+                              @RequestParam(name = "pageSize", defaultValue = "5") int size,
+                              @RequestParam(name = "sort", defaultValue = "NO") String sort) {
+        Page<GetProductDto> all = productService.findAll(page, size, SortType.valueOf(sort));
         List<List<GetProductDto>> partition = ListUtils.partition(all.getContent(), 3);
         model.addAttribute("products", partition);
         model.addAttribute("currentPage", page);

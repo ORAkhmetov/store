@@ -4,13 +4,16 @@ import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.store.converter.ProductConverter;
 import ru.practicum.store.dto.CreateProductDto;
 import ru.practicum.store.dto.GetProductDto;
 import ru.practicum.store.exception.EntityNotFoundException;
 import ru.practicum.store.model.Product;
+import ru.practicum.store.model.SortType;
 import ru.practicum.store.repository.ProductRepository;
 import ru.practicum.store.service.ProductService;
 
@@ -30,9 +33,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<GetProductDto> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable)
-                .map(productConverter::convertToGetProductDto);
+    public Page<GetProductDto> findAll(int page, int size, SortType sortType) {
+        String sortedBy = null;
+        switch (sortType) {
+            case ALPHA -> sortedBy = "title";
+            case PRICE -> sortedBy = "price";
+        }
+        Sort sort = sortedBy != null ? Sort.by(Sort.Order.asc(sortedBy)) : Sort.unsorted();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return productRepository.findAll(pageable).map(productConverter::convertToGetProductDto);
+    }
+
+    @Override
+    public Product findById(long id) {
+        return productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
 
     @Override
