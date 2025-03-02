@@ -5,7 +5,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,8 +31,9 @@ public class ProductController {
     public String allProducts(Model model,
                               @RequestParam(name = "page", defaultValue = "0") int page,
                               @RequestParam(name = "pageSize", defaultValue = "5") int size,
-                              @RequestParam(name = "sort", defaultValue = "NO") String sort) {
-        Page<GetProductDto> all = productService.findAll(page, size, SortType.valueOf(sort));
+                              @RequestParam(name = "sort", defaultValue = "NO") String sort,
+                              @RequestParam(name = "search", required = false) String searchString) {
+        Page<GetProductDto> all = productService.findAll(page, size, SortType.valueOf(sort), searchString);
         List<List<GetProductDto>> partition = ListUtils.partition(all.getContent(), 3);
         model.addAttribute("products", partition);
         model.addAttribute("currentPage", page);

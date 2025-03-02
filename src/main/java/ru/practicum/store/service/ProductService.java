@@ -10,7 +10,7 @@ public interface ProductService {
 
     GetProductDto create(CreateProductDto dto);
 
-    Page<GetProductDto> findAll(int page, int size, SortType sortType);
+    Page<GetProductDto> findAll(int page, int size, SortType sortType, String searchString);
 
     Product findById(long id);
 

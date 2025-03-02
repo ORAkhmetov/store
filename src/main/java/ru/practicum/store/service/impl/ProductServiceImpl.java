@@ -33,15 +33,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<GetProductDto> findAll(int page, int size, SortType sortType) {
-        String sortedBy = null;
-        switch (sortType) {
-            case ALPHA -> sortedBy = "title";
-            case PRICE -> sortedBy = "price";
+    public Page<GetProductDto> findAll(int page, int size, SortType sortType, String searchString) {
+        if (searchString != null) {
+            return productRepository.findAllByTitleContainingIgnoreCase(searchString, getPageable(page, size, sortType))
+                    .map(productConverter::convertToGetProductDto);
+        } else {
+            return productRepository.findAll(getPageable(page, size, sortType))
+                    .map(productConverter::convertToGetProductDto);
         }
-        Sort sort = sortedBy != null ? Sort.by(Sort.Order.asc(sortedBy)) : Sort.unsorted();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return productRepository.findAll(pageable).map(productConverter::convertToGetProductDto);
     }
 
     @Override
@@ -70,5 +69,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long id) {
         productRepository.deleteById(id);
+    }
+
+    private Pageable getPageable(int page, int size, SortType sortType) {
+        String sortedBy = null;
+        switch (sortType) {
+            case ALPHA -> sortedBy = "title";
+            case PRICE -> sortedBy = "price";
+        }
+        Sort sort = sortedBy != null ? Sort.by(Sort.Order.asc(sortedBy)) : Sort.unsorted();
+        return PageRequest.of(page, size, sort);
     }
 }
