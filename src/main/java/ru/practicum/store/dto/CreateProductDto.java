@@ -15,7 +15,7 @@ public class CreateProductDto {
 
     private String image;
 
-    private long price;
+    private double price;
 
     private String description;
 }
