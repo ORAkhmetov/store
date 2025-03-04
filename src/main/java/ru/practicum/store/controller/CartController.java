@@ -28,6 +28,7 @@ public class CartController {
     public String index(Model model) {
         List<GetCartDto> allCarts = cartService.findAllCarts();
         model.addAttribute("carts", allCarts);
+        model.addAttribute("sum", cartService.calculateSumPrice(allCarts));
         return "cart";
     }
 
@@ -46,7 +47,6 @@ public class CartController {
             case "minus" -> cartService.decreaseQuantity(id);
             case "delete" -> cartService.deleteCart(id);
         }
-        cartService.increaseQuantity(id);
         return "redirect:/cart/";
     }
 }

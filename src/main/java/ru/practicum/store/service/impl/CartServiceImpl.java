@@ -70,4 +70,9 @@ public class CartServiceImpl implements CartService {
     public Cart findCartByProductId(long id) {
         return cartRepository.findCartByProductId(id).orElseThrow(() -> new EntityNotFoundException("Cart not found"));
     }
+
+    @Override
+    public double calculateSumPrice(List<GetCartDto> carts) {
+        return carts.stream().mapToDouble(cart -> cart.getProductPrice() * cart.getQuantity()).sum();
+    }
 }

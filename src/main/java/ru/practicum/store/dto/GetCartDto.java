@@ -19,7 +19,7 @@ public class GetCartDto {
 
     private String productDescription;
 
-    private long productPrice;
+    private double productPrice;
 
     private int quantity;
 }
