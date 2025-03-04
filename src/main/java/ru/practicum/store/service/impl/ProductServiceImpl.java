@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<GetProductDto> findAll(int page, int size, SortType sortType, String searchString) {
-        if (searchString != null) {
+        if (SortType.NO.equals(sortType)) {
             return productRepository.findAllByTitleContainingIgnoreCase(searchString, getPageable(page, size, sortType))
                     .map(productConverter::convertToGetProductDto)
                     .map(this::setCartInProduct);
