@@ -20,4 +20,6 @@ public class GetProductDto {
     private double price;
 
     private String description;
+
+    private CartInProductDto cart;
 }

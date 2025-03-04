@@ -4,6 +4,7 @@ import java.util.List;
 
 import ru.practicum.store.dto.CreateCartDto;
 import ru.practicum.store.dto.GetCartDto;
+import ru.practicum.store.model.Cart;
 
 public interface CartService {
 
@@ -16,4 +17,6 @@ public interface CartService {
     void decreaseQuantity(long id);
 
     void deleteCart(long id);
+
+    Cart findCartByProductId(long id);
 }

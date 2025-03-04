@@ -3,6 +3,7 @@ package ru.practicum.store.controller;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -15,17 +16,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.practicum.store.dto.CreateCartDto;
 import ru.practicum.store.dto.CreateProductDto;
 import ru.practicum.store.dto.GetProductDto;
 import ru.practicum.store.model.SortType;
+import ru.practicum.store.service.CartService;
 import ru.practicum.store.service.ProductService;
 
 @Controller
 @RequestMapping("/product")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;
+
+    private final CartService cartService;
 
     @GetMapping("/")
     public String allProducts(Model model,
@@ -64,6 +70,24 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable(name = "id") Long id) {
         productService.delete(id);
+        return "redirect:/product/";
+    }
+
+    @PostMapping("/cart")
+    public String addCart(@ModelAttribute CreateCartDto dto) {
+        cartService.createCart(dto);
+        return "redirect:/product/";
+    }
+
+    @PostMapping("/cart/updateQuantity/{id}")
+    public String update(@PathVariable(name = "id") long id,
+                         @RequestParam String action) {
+        log.info("Action: " + action);
+        switch (action) {
+            case "plus" -> cartService.increaseQuantity(id);
+            case "minus" -> cartService.decreaseQuantity(id);
+            case "delete" -> cartService.deleteCart(id);
+        }
         return "redirect:/product/";
     }
 }

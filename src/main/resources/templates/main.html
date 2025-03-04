@@ -95,13 +95,16 @@
                     		В action ссылка на изменение количества товара в корзине.
                     		Передается параметр запроса action=[minus|plus]
                     	    -->
-                            <form th:action="..." method="post">
-                                <button name="action" value="minus">-</button>
-                                <!-- В text количество товара в корзине -->
-                                <span th:text="..."></span>
-                                <button name="action" value="plus">+</button>
-                                <!-- В if true, если товар еще не был добавлен в корзину, false, если уже был -->
-                                <button name="action" value="plus" th:if="..." style="float:right;">В корзину</button>
+                            <form th:action="@{/product/cart/updateQuantity/{id}(id=${product.cart?.id})}" method="post">
+                                <button name="action" value="minus" th:if="${product.cart != null}">-</button>
+                                <span th:text="${product.cart?.quantity ?: 0}"></span>
+                                <button name="action" value="plus" th:if="${product.cart != null}">+</button>
+                            </form>
+
+                            <!-- Форма для добавления в корзину -->
+                            <form th:action="@{/product/cart}" method="post" th:if="${product.cart == null}" style="float:right;">
+                                <input type="hidden" name="productId" th:value="${product.id}" />
+                                <button type="submit">В корзину</button>
                             </form>
                         </td>
                     </tr>

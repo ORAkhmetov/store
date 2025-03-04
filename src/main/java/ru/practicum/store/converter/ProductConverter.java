@@ -14,6 +14,7 @@ public interface ProductConverter {
     Product convertToProduct(CreateProductDto dto);
 
     @Mapping(target = "price", qualifiedByName = "convertPriceToDouble")
+    @Mapping(target = "cart", ignore = true)
     GetProductDto convertToGetProductDto(Product product);
 
     @Named("convertPriceToLong")

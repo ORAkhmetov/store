@@ -5,11 +5,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.store.converter.CartConverter;
 import ru.practicum.store.dto.CreateCartDto;
 import ru.practicum.store.dto.GetCartDto;
+import ru.practicum.store.exception.EntityNotFoundException;
 import ru.practicum.store.model.Cart;
 import ru.practicum.store.model.Product;
 import ru.practicum.store.repository.CartRepository;
@@ -18,6 +20,7 @@ import ru.practicum.store.service.ProductService;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
@@ -41,6 +44,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void increaseQuantity(long id) {
+        log.info("Increase quantity");
         cartRepository.increaseQuantity(id);
     }
 
@@ -60,5 +64,10 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteCart(long id) {
         cartRepository.deleteById(id);
+    }
+
+    @Override
+    public Cart findCartByProductId(long id) {
+        return cartRepository.findCartByProductId(id).orElseThrow(() -> new EntityNotFoundException("Cart not found"));
     }
 }

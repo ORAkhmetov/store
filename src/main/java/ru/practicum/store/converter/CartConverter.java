@@ -2,6 +2,7 @@ package ru.practicum.store.converter;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.practicum.store.dto.CartInProductDto;
 import ru.practicum.store.dto.CreateCartDto;
 import ru.practicum.store.dto.GetCartDto;
 import ru.practicum.store.model.Cart;
@@ -16,5 +17,8 @@ public interface CartConverter {
     GetCartDto toDto(Cart cart);
 
     @Mapping(source = "productId", target = "product", ignore = true)
+    @Mapping(target = "quantity", constant = "1")
     Cart toCart(CreateCartDto dto);
+
+    CartInProductDto cartToDto(Cart cart);
 }

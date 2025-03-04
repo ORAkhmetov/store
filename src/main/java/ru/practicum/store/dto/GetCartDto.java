@@ -21,5 +21,5 @@ public class GetCartDto {
 
     private long productPrice;
 
-    private long quantity;
+    private int quantity;
 }

@@ -8,12 +8,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.practicum.store.converter.CartConverter;
 import ru.practicum.store.converter.ProductConverter;
 import ru.practicum.store.dto.CreateProductDto;
 import ru.practicum.store.dto.GetProductDto;
 import ru.practicum.store.exception.EntityNotFoundException;
+import ru.practicum.store.model.Cart;
 import ru.practicum.store.model.Product;
 import ru.practicum.store.model.SortType;
+import ru.practicum.store.repository.CartRepository;
 import ru.practicum.store.repository.ProductRepository;
 import ru.practicum.store.service.ProductService;
 
@@ -24,6 +27,10 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     private final ProductConverter productConverter;
+
+    private final CartRepository cartRepository;
+
+    private final CartConverter cartConverter;
 
     @Override
     public GetProductDto create(CreateProductDto dto) {
@@ -36,11 +43,19 @@ public class ProductServiceImpl implements ProductService {
     public Page<GetProductDto> findAll(int page, int size, SortType sortType, String searchString) {
         if (searchString != null) {
             return productRepository.findAllByTitleContainingIgnoreCase(searchString, getPageable(page, size, sortType))
-                    .map(productConverter::convertToGetProductDto);
+                    .map(productConverter::convertToGetProductDto)
+                    .map(this::setCartInProduct);
         } else {
             return productRepository.findAll(getPageable(page, size, sortType))
-                    .map(productConverter::convertToGetProductDto);
+                    .map(productConverter::convertToGetProductDto)
+                    .map(this::setCartInProduct);
         }
+    }
+
+    private GetProductDto setCartInProduct(GetProductDto dto) {
+        Optional<Cart> cart = cartRepository.findCartByProductId(dto.getId());
+        dto.setCart(cart.map(cartConverter::cartToDto).orElse(null));
+        return dto;
     }
 
     @Override
