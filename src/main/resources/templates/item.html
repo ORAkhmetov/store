@@ -11,39 +11,43 @@
         <b>ЗАКАЗЫ &cudarrr;</b>
     </a>
     <!-- В href ссылка на корзину -->
-    <a href="..." style="float:right;">
+    <a href="/cart/" style="float:right;">
         <b>КОРЗИНА &cudarrr;</b>
     </a>
     <!-- В href ссылка на главную страницу -->
-    <a href="..." style="float:right;">
+    <a href="/product/" style="float:right;">
         <b>ГЛАВНАЯ &cudarrr;</b>
     </a>
     <div style="width:70%;margin-left:auto;margin-right:auto;">
         <p>
             <!-- В src ссылка изображение товара -->
-            <img width="300" height="300" th:src="...">
+            <img width="300" height="300" th:src="${product.image}">
         </p>
         <p>
             <!-- В text название товара -->
-            <b th:text="..."></b>
+            <b th:text="${product.title}"></b>
             <!-- В text цена товара -->
-            <b th:text="..." style="text-align:right;"></b>
+            <b th:text="${product.price}" style="text-align:right;"></b>
         </p>
         <p>
             <!-- В text описание товара -->
-            <span th:text="..."></span>
+            <span th:text="${product.description}"></span>
         </p>
         <!-- 
 		В action ссылка на изменение количества товара в корзине.
 		Передается параметр запроса action=[minus|plus]
 	-->
-        <form th:action="..." method="post">
-            <button name="action" value="minus">-</button>
-            <!-- В text количество товара в корзине -->
-            <span th:text="..."></span>
-            <button name="action" value="plus">+</button>
-            <!-- В if true, если товар еще не был добавлен в корзину, false, если уже был -->
-            <button name="action" value="plus" th:if="..." style="float:right;">В корзину</button>
+        <form th:action="@{/product/cart/updateQuantity/{id}(id=${product.cart?.id})}" method="post">
+            <button name="action" value="minus" th:if="${product.cart != null}">-</button>
+            <span th:text="${product.cart?.quantity ?: 0}"></span>
+            <button name="action" value="plus" th:if="${product.cart != null}">+</button>
+            <button name="action" value="delete" th:if="${product.cart != null}">Удалить</button>
+        </form>
+
+        <!-- Форма для добавления в корзину -->
+        <form th:action="@{/product/cart}" method="post" th:if="${product.cart == null}" style="float:right;">
+            <input type="hidden" name="productId" th:value="${product.id}" />
+            <button type="submit">В корзину</button>
         </form>
     </div>
 </body>

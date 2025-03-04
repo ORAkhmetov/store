@@ -67,6 +67,7 @@ public class ProductServiceImpl implements ProductService {
     public GetProductDto findById(Long id) {
         return productRepository.findById(id)
                 .map(productConverter::convertToGetProductDto)
+                .map(this::setCartInProduct)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
 

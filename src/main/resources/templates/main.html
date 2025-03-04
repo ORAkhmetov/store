@@ -99,6 +99,7 @@
                                 <button name="action" value="minus" th:if="${product.cart != null}">-</button>
                                 <span th:text="${product.cart?.quantity ?: 0}"></span>
                                 <button name="action" value="plus" th:if="${product.cart != null}">+</button>
+                                <button name="action" value="delete" th:if="${product.cart != null}">Удалить</button>
                             </form>
 
                             <!-- Форма для добавления в корзину -->
