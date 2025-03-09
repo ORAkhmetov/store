@@ -27,7 +27,6 @@ public class OrderController {
     public String index(Model model) {
         List<GetOrderDtoInAll> all = orderService.findAll();
         model.addAttribute("orders", all);
-        //model.addAttribute("sum", orderService.sumPriceAllOrder(all));
         return "orders";
     }
 
