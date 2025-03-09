@@ -13,4 +13,6 @@ import ru.practicum.store.model.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findAllByTitleContainingIgnoreCase(String title, Pageable pageable);
+
+    List<Product> findByIdIn(List<Long> ids);
 }

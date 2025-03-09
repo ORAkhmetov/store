@@ -7,7 +7,7 @@
 
 <body>
 <!-- В href ссылка на страницу заказов -->
-<a href="..." style="float:right;">
+<a href="/order/" style="float:right;">
     <b>ЗАКАЗЫ &cudarrr;</b>
 </a>
 <!-- В href ссылка на главную страницу -->
@@ -66,7 +66,11 @@
             	В action ссылка на страницу оформления заказа.
             	В if true, если в корзине есть товары, false, если нет
             -->
-            <form action="..." method="post" th:if="...">
+            <form action="/order/" method="post" th:if="${!carts.isEmpty()}">
+                <div th:each="cart, cartStat : ${carts}">
+                    <input type="hidden" th:name="|products[${cartStat.index}].productId|" th:value="${cart.productId}" />
+                    <input type="hidden" th:name="|products[${cartStat.index}].quantity|" th:value="${cart.quantity}" />
+                </div>
                 <button>Купить</button>
             </form>
         </td>

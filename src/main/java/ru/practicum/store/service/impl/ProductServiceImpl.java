@@ -41,15 +41,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<GetProductDto> findAll(int page, int size, SortType sortType, String searchString) {
-        if (SortType.NO.equals(sortType)) {
-            return productRepository.findAllByTitleContainingIgnoreCase(searchString, getPageable(page, size, sortType))
-                    .map(productConverter::convertToGetProductDto)
-                    .map(this::setCartInProduct);
-        } else {
+        if (searchString == null || searchString.isEmpty()) {
             return productRepository.findAll(getPageable(page, size, sortType))
                     .map(productConverter::convertToGetProductDto)
                     .map(this::setCartInProduct);
+        } else {
+            return productRepository.findAllByTitleContainingIgnoreCase(searchString, getPageable(page, size, sortType))
+                    .map(productConverter::convertToGetProductDto)
+                    .map(this::setCartInProduct);
         }
+        /*if (SortType.NO.equals(sortType)) {
+            return productRepository.findAll(getPageable(page, size, sortType))
+                    .map(productConverter::convertToGetProductDto)
+                    .map(this::setCartInProduct);
+        } else {
+
+            return productRepository.findAllByTitleContainingIgnoreCase(searchString, getPageable(page, size, sortType))
+                    .map(productConverter::convertToGetProductDto)
+                    .map(this::setCartInProduct);
+        }*/
     }
 
     private GetProductDto setCartInProduct(GetProductDto dto) {

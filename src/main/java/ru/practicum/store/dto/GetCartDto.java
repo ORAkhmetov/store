@@ -13,6 +13,8 @@ public class GetCartDto {
 
     private long id;
 
+    private long productId;
+
     private String productTitle;
 
     private String productImage;

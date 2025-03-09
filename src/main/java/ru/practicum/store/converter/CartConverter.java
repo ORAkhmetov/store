@@ -2,7 +2,6 @@ package ru.practicum.store.converter;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import ru.practicum.store.dto.CartInProductDto;
 import ru.practicum.store.dto.CreateCartDto;
 import ru.practicum.store.dto.GetCartDto;
@@ -11,6 +10,7 @@ import ru.practicum.store.model.Cart;
 @Mapper(componentModel = "spring")
 public interface CartConverter {
 
+    @Mapping(target = "productId", expression = "java(cart.getProduct().getId())")
     @Mapping(target = "productTitle", expression = "java(cart.getProduct().getTitle())")
     @Mapping(target = "productPrice", expression = "java(convertPriceToDouble(cart.getProduct().getPrice()))")
     @Mapping(target = "productImage", expression = "java(cart.getProduct().getImage())")

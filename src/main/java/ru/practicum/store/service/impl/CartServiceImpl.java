@@ -75,4 +75,9 @@ public class CartServiceImpl implements CartService {
     public double calculateSumPrice(List<GetCartDto> carts) {
         return carts.stream().mapToDouble(cart -> cart.getProductPrice() * cart.getQuantity()).sum();
     }
+
+    @Override
+    public void clearCarts() {
+        cartRepository.deleteAll();
+    }
 }

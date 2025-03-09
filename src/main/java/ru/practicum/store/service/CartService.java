@@ -21,4 +21,6 @@ public interface CartService {
     Cart findCartByProductId(long id);
 
     double calculateSumPrice(List<GetCartDto> carts);
+
+    void clearCarts();
 }
